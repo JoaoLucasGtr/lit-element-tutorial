@@ -1,21 +1,53 @@
-/**
- * TODO: Import the LitElement base class and html helper function.
- */
-import { LitElement, html } from 'lit-element';
+import { LitElement, html, css } from "lit-element";
 
-/**
- * TODO: Create a class for your element that extends the LitElement
- * base class.
- */
-class MyElement extends LitElement { 
-  render() {
-    return html`
-      <p>Hello world! From my-element</p>
+class MyElement extends LitElement {
+  static get styles() {
+    return css`
+      p {
+        font-family: Roboto;
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .red {
+        color: red;
+      }
+      .blue {
+        color: blue;
+      }
     `;
   }
-}    
 
-/**
- * TODO: Register the new element with the browser.
- */
-customElements.define('my-element', MyElement);
+  static get properties() {
+    return {
+      message: { type: String },
+      myBool: { type: Boolean },
+      myArray: { type: Array }
+    };
+  }
+  
+  constructor() {
+    super();
+    this.message = "Hello world! From my-element";
+    this.myBool = true;
+    this.myArray = ["an", "array", "of", "test", "data"];
+  }
+
+  clickHandler(event) {
+    this.myBool = !this.myBool;
+  }
+
+  render() {
+    return html`
+      <p class="${this.myBool ? 'red' : 'blue' }">styled paragraph</p>
+      <p>${this.message}</p>
+      <ul>${this.myArray.map(item => html`<li>${item}</li>`)}</ul>
+      
+      ${this.myBool ?
+        html`<p>Render some HTML if myBool is true</p>` :
+        html`<p>Render some other HTML if myBool is false</p>`}
+
+      <button @click=${this.clickHandler}>Click</button>
+    `;
+  }
+}
+customElements.define("my-element", MyElement);
